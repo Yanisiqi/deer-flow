@@ -9,6 +9,7 @@
 - **Backend**: Python 3.12+, FastAPI, LangGraph 1.1+, LangChain, SQLAlchemy, SQLite/PostgreSQL, Pydantic 2, uv
 - **Frontend**: Next.js 16, React 19, TypeScript 5.8, Tailwind CSS 4, TanStack Query 5, Vercel AI SDK 6, Shadcn UI, CodeMirror
 - **Infra**: Docker, Nginx (port 2026), Docker Compose
+- **Venv Python**: `backend/.venv/Scripts/python.exe` (Windows)
 
 ## Key Directories
 
