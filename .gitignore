@@ -62,6 +62,6 @@ config.yaml.bak
 .worktrees
 
 # Customized
-tutorials/
 research-detail/
-general_tutorials/
+*tutorials/
+local-database-knowledge-docs/
