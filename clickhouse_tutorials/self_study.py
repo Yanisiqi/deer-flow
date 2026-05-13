@@ -63,6 +63,13 @@ if __name__ == "__main__":
     # for name, typ, comment in columns:
     #     print(f"  {name:30s} {typ:30s} {comment or ''}")
 
+    # 总行数
+    rows = client.execute('''
+select count() from relation_share_data
+''')
+    for row in rows:
+        print(row)
+
     # 查询所有 type
 #     rows = client.execute('''
 # select distinct type from entity_share_data
@@ -78,16 +85,16 @@ if __name__ == "__main__":
 #         print(row)
     
     # 模糊人名查询
-    print("\n模糊人名查询:")
-    rows, columns = client.execute('''
-        SELECT * FROM entity_share_data
-        WHERE name like '%特朗普%'
-        AND type = 'human'
-''',
-    with_column_types=True
-                          )
-    col_names = [c[0] for c in columns]
-    col_types = [c[1] for c in columns]
+#     print("\n模糊人名查询:")
+#     rows, columns = client.execute('''
+#         SELECT * FROM entity_share_data
+#         WHERE name like '%特朗普%'
+#         AND type = 'human'
+# ''',
+#     with_column_types=True
+#                           )
+#     col_names = [c[0] for c in columns]
+#     col_types = [c[1] for c in columns]
 
     # 打印所有信息
     # for row in rows:    
@@ -95,4 +102,4 @@ if __name__ == "__main__":
     #         print(f"{name} {c_type}: {val}")
     
     # 只打印有实际值的信息
-    inspect_rows(rows, col_names)
+    # inspect_rows(rows, col_names)

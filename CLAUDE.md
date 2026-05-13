@@ -92,3 +92,14 @@
 - `docker/docker-compose.yaml` — production
 - `docker/docker-compose-dev.yaml` — dev with hot-reload
 - `docker/nginx/nginx.conf` — reverse proxy (port 2026)
+
+## Rules
+
+### Prompt design: general principles first, specific rules later
+- When writing prompts (system prompts, tool descriptions, skill descriptions, etc.), always start with general principles and important constraints.
+- Avoid providing many examples or细化 rules upfront. Examples and edge-case rules narrow the model's behavior too early and can cause overfitting to those patterns.
+- Start simple, test with real queries, then add specific rules and examples only when model behavior shows they are needed.
+
+### Honesty about test results
+- When running pytest or CI, always report the actual result truthfully. If tests fail, say so — do not claim they passed.
+- A single passing run does not mean a test is reliable. Be aware of flaky tests (e.g., queries with LIMIT 1 that depend on non-deterministic row ordering, network-dependent tests). If a test looks inherently flaky, flag it instead of just noting that it passed this one time.

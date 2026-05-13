@@ -502,3 +502,157 @@
 | **合计** | **~11,457,339** | **100%** |
 
 > 地理实体（`geographic_entity`）占比最高，其次为人物（`human`）和行政区划（`administrative`），三者合计占总量约 85%。
+
+---
+
+## 二十、Human 类型字段填充率分析（2026-05-13）
+
+> 分析基于 `type='human'` 的 3,720,754 行记录，统计每列非空/非默认值的比例。
+>
+> **注意**：数值列（Int/Float）只要非 NULL 即算"有数据"。ClickHouse 中非 Nullable 的数值列默认值为 0，
+> 因此所有数值列均显示 **100%** 填充。真正有区分度的是 String 和 Array 列。
+
+### 20.1 概览
+
+| 指标 | 值 |
+|---|---|
+| `type='human'` 行数 | 3,720,754 |
+| 总列数 | 346 |
+| 有数据列 | 171（49.4%） |
+| 完全为空列 | 175（50.6%） |
+
+### 20.2 高填充列（String/Array, fill ≥ 10%）
+
+这些是查询 human 实体时**最常用**的列：
+
+| 填充率 | 非空行数 | 字段 | 类型 | 说明 |
+|---|---|---|---|---|
+| 96.0% | 3,570,439 | `sex_or_gender` | String | 性别 |
+| 87.2% | 3,245,289 | `occupation` | Array(String) | 职业 |
+| 75.9% | 2,824,145 | `text` | String | 描述文本 |
+| 72.4% | 2,694,104 | `country_of_citizenship` | Array(String) | 国籍 |
+| 57.9% | 2,154,386 | `place_of_birth` | Array(String) | 出生地 |
+| 25.2% | 937,302 | `nonnative_names` | Array(String) | 非原生语言名称 |
+| 23.3% | 867,255 | `education_experience.*` (4列) | Array | 教育经历 |
+| 22.8% | 849,200 | `image` | Array(String) | 图片 URL |
+| 22.0% | 817,603 | `place_of_death` | String | 死亡地点 |
+| 21.8% | 810,293 | `school` | String | 学校 |
+| 20.5% | 763,098 | `position_experience.*` (4列) | Array | 任职经历 |
+| 12.2% | 453,519 | `position_held` | Array(String) | 曾担任职位 |
+| 11.3% | 420,883 | `award_received` | Array(String) | 获奖 |
+
+### 20.3 中填充列（String/Array, 1% ≤ fill < 10%）
+
+| 填充率 | 非空行数 | 字段 | 类型 |
+|---|---|---|---|
+| 8.8% | 327,596 | `department_or_company` | String |
+| 8.7% | 322,996 | `member_of_political_party` | Array(String) |
+| 5.2% | 195,178 | `abstract` | String |
+| 5.0% | 185,946 | `work_location` | Array(String) |
+| 4.6% | 171,647 | `father` | String |
+| 4.1% | 151,987 | `religion` | Array(String) |
+| 3.9% | 146,123 | `member_of` | Array(String) |
+| 3.9% | 144,674 | `child` | Array(String) |
+| 3.8% | 141,833 | `spouse` | Array(String) |
+| 3.6% | 133,744 | `native_language` | String |
+| 3.4% | 127,333 | `personal_website_account` | Array(String) |
+| 3.0% | 113,094 | `sibling` | Array(String) |
+| 3.0% | 111,368 | `twitter_username` | Array(String) |
+| 2.6% | 96,491 | `official_website` | Array(String) |
+| 2.4% | 90,966 | `military_rank` | Array(String) |
+| 2.4% | 89,670 | `cause_of_death` | String |
+| 2.2% | 82,812 | `aliases` | Array(String) |
+| 2.1% | 77,717 | `mother` | String |
+| 2.0% | 75,283 | `ethnic_group` | Array(String) |
+| 2.0% | 72,818 | `hometown` | Array(String) |
+| 1.9% | 72,310 | `manner_of_death` | String |
+| 1.9% | 71,453 | `military_branch` | Array(String) |
+| 1.9% | 70,094 | `academic_degree` | Array(String) |
+| 1.4% | 53,860 | `facebook_id` | Array(String) |
+| 0.8% | 28,058 | `pseudonym` | Array(String) |
+| 0.2% | 6,514 | `unmarried_partner` | String |
+| 0.1% | 1,983 | `political_leaning` | String |
+
+### 20.4 低填充列（String/Array, fill < 0.1%）
+
+数据极少，但某些场景有用：
+
+`labels` (1,088), `short_name` (878), `social_media_account` (714), `email` (656),
+`academic_major` (635), `phone_number` (565), `ancestral_home` (555),
+`residence` (522), `date_of_disappearance` (522), `political_ideology` (309),
+`country` (161), `telephone` (148), `headquarters_location` (115),
+`education_background` (73), `professional_division` (70),
+`political_faction` (44), `fax` (44), `bank_account` (33),
+`armament.*` (21), `address` (18), `postal_code` (9),
+`use` (8), `stats_attr.*` (7), `capital.*` (4),
+`medias.*` (3), `call_sign` (2), `employee_number.*` (1),
+`vessel_class` (1), `notes.*` (1)
+
+### 20.5 完全为空的列（175 列）
+
+对 human 类型完全无数据的列，多属武器/军事/组织/行政区划专有字段：
+
+```
+legal_form, industry, population.*, gdp.*, member_count.*,
+continent, located_in_or_next_to_body_of_water, gini_coefficient.*,
+local_dialing_code, location_of_creation, total_produced.*,
+cost.*, length.length_unit, width.width_unit, mass.mass_unit,
+diameter.diameter_unit, wingspan.wingspan_unit, pennant_number,
+register_loc, former_name, title, political_status, owned_by,
+runway.*, altitude.altitude_unit, participated_in_wars, garrison,
+commanded_by, geoshape, street_address, used_by,
+hull_length.hull_length_unit, hull_width.hull_width_unit,
+draft.draft_unit, crew_member, cruise_speed.cruise_speed_unit,
+standard_displacement.standard_displacement_unit,
+full_loaded_displacement.full_loaded_displacement_unit,
+power_system, firing_range.firing_range_unit, service_city,
+area.*, arm_of_the_services, operator, built_by,
+combat_radius.combat_radius_unit, battle_group, subordinate_fleet,
+flight_deck_length.flight_deck_length_unit, hangar_width.hangar_width_unit,
+home_port, hangar_length.hangar_length_unit,
+angled_deck_length.angled_deck_length_unit,
+flight_deck_width.flight_deck_width_unit,
+detection_distance.detection_distance_unit,
+length_between_perpendiculars.length_between_perpendiculars_unit,
+close_in_weapon, hangar_height.hangar_height_unit,
+cost.cost_unit, total_produced.total_produced_unit,
+warship_captain.*, patron_num.*, caliber.*,
+significant_event.*, area.area_time, gdp.gdp_unit,
+population.population_unit, member_count.member_count_unit,
+employee, deputy_commanded_by, chief_of_staff, subsidiary,
+parent_organization, countries_covered_by_jurisdiction,
+place, secretary_general, founded_by,
+contains_administrative_territorial_entity, shares_border_with,
+executive_branch, driving_side, time_zone, legislature,
+national_anthem, currency, country_calling_code,
+emergency_phone_number, basic_form_of_government,
+highest_judicial_authority, public_holiday, top_level_domain,
+official_language, flag, head_of_state.*, head_of_government.*,
+named_after, located_in_the_administrative_territorial_entity,
+twin_town, logo_image, station_code, owner,
+director_of_the_organization, leader, list_of_monuments,
+product_or_material_produced, language_of_work, main_subject,
+contains_settlement, location_of_formation, genre,
+contact_phone_number, editor, official_symbol,
+chief_executive_officer, operating_area, planning,
+business_division, distribution_format, notable_work,
+material_used, members_have_occupation, art_director,
+aerodrome_reference_point, price.price_unit, copyright_license,
+present_in_work, original_broadcaster, business_model, shape,
+intended_public, official_app, chief_operating_officer,
+commissioned_by, corporate_officer, has_quality, operating_system,
+fabrication_method, developer, series, based_on, cast_member,
+set_in_period, director, screenwriter,
+contributor_to_the_creative_work_or_subject, narrative_location,
+composer, duration.duration_unit, source_of_energy,
+instrumentation, author, publisher, volume.volume_unit,
+transmitted_signal_type, brand
+```
+
+### 20.6 对查询的指导意义
+
+1. **优先使用高填充列**：`name` + `type` 永远是 WHERE 条件；`occupation`、`country_of_citizenship`、`place_of_birth` 查询命中率高
+2. **大宽表中只有约一半列对 human 有价值**，另一半（武器/组织专属列）可完全忽略
+3. **教育经历和任职经历**以嵌套数组结构存储，需用 `ARRAY JOIN` 展开
+4. **数值列（如 height、weight 等）默认填充 0**，实际有意义的记录只有 `height.height_unit` (4.3%)、`weight.weight_unit` (3.1%) 等配套字段可以佐证
+5. 175 个空列对 human 查询可安全忽略
