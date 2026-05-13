@@ -179,7 +179,7 @@ def _format_rows(rows: list[tuple], columns: list[str], max_col_width: int = 80)
 def get_table_schema_tool(
     table_name: str = "entity_share_data",
 ) -> str:
-    """Get the column schema (name, type, comment) for a table in the goin_new database.
+    """Get the column schema (name, type, comment) for a table in the local clickhouse database.
 
     Use this tool FIRST when you are unsure about the table structure.
     Always check column names and types before writing SQL queries.
