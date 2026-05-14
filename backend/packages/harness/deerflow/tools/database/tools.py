@@ -214,7 +214,7 @@ def execute_sql_tool(
     sql: str,
     max_col_width: int = 80,
 ) -> str:
-    """Execute a read-only SQL query against the entity_share_data table and return formatted results.
+    """Execute a read-only SQL query against the local ClickHouse database (entity_share_data table) and return formatted results.
 
     Only SELECT, WITH, DESCRIBE, and EXPLAIN statements are allowed.
     INSERT, UPDATE, DELETE, DROP, and other modification statements are rejected.
