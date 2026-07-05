@@ -2,14 +2,7 @@
 
 **DeerFlow** (Deep Exploration and Efficient Research Flow) is ByteDance's open-source super agent harness built with Python (FastAPI + LangGraph) + TypeScript (Next.js 16).
 
-> **Note**: `backend/CLAUDE.md` contains a detailed architecture reference (middleware chain, config schema, development workflow). This file is a lightweight navigation index — check there for deep-dive details.
-
-## Tech Stack
-
-- **Backend**: Python 3.12+, FastAPI, LangGraph 1.1+, LangChain, SQLAlchemy, SQLite/PostgreSQL, Pydantic 2, uv
-- **Frontend**: Next.js 16, React 19, TypeScript 5.8, Tailwind CSS 4, TanStack Query 5, Vercel AI SDK 6, Shadcn UI, CodeMirror
-- **Infra**: Docker, Nginx (port 2026), Docker Compose
-- **Venv Python**: `backend/.venv/Scripts/python.exe` (Windows)
+> **Note**: This file is a navigation index. `backend/CLAUDE.md` (~570 lines) is the complete architecture reference — read it when working on backend code, debugging agent behavior, or modifying architecture components (middleware chain, config schema, sandbox, subagents, MCP, memory, Gateway API, etc.). It is loaded on-demand (subdirectory CLAUDE.md), not automatically.
 
 ## Key Directories
 
@@ -24,6 +17,14 @@
 | `docs/` | Internal docs and plans |
 | `config.yaml` | Main application configuration |
 | `extensions_config.json` | MCP servers + skill enable/disable |
+
+## Python Environment
+
+Python exe: `backend/.venv/Scripts/python.exe` (Windows).
+
+## Makefile
+
+Root `Makefile` (full app: check, install, dev, stop) and `backend/Makefile` (backend-only: dev, gateway, test, lint). Read the Makefile directly for available targets and details.
 
 ## When users ask about...
 
@@ -86,7 +87,8 @@
 
 ### Tests
 - `backend/tests/` — ~160+ Python test files
-- `frontend/` — Vitest (unit) + Playwright (e2e)
+- `frontend/tests/unit/` — Vitest unit tests
+- `frontend/tests/e2e/` — Playwright e2e tests
 
 ### Docker / deployment
 - `docker/docker-compose.yaml` — production
@@ -97,7 +99,7 @@
 
 ### Prompt design: general principles first, specific rules later
 - When writing prompts (system prompts, tool descriptions, skill descriptions, etc.), always start with general principles and important constraints.
-- Avoid providing many examples or细化 rules upfront. Examples and edge-case rules narrow the model's behavior too early and can cause overfitting to those patterns.
+- Avoid providing many examples or over-specifying rules upfront. Examples and edge-case rules narrow the model's behavior too early and can cause overfitting to those patterns.
 - Start simple, test with real queries, then add specific rules and examples only when model behavior shows they are needed.
 
 ### Honesty about test results

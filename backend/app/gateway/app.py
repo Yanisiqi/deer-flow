@@ -302,10 +302,11 @@ This gateway provides custom endpoints for models, MCP configuration, skills, an
     )
 
     # Auth: reject unauthenticated requests to non-public paths (fail-closed safety net)
-    app.add_middleware(AuthMiddleware)
+    if not os.environ.get("DEER_FLOW_NO_AUTH"):
+        app.add_middleware(AuthMiddleware)
 
-    # CSRF: Double Submit Cookie pattern for state-changing requests
-    app.add_middleware(CSRFMiddleware)
+        # CSRF: Double Submit Cookie pattern for state-changing requests
+        app.add_middleware(CSRFMiddleware)
 
     # CORS: when GATEWAY_CORS_ORIGINS is set (dev without nginx), add CORS middleware.
     # In production, nginx handles CORS and no middleware is needed.

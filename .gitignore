@@ -65,6 +65,7 @@ config.yaml.bak
 research-detail/
 *tutorials/
 local-database-knowledge-docs/
+weekly-reports/
 *.xlsx
 
 
