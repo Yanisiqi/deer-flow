@@ -31,3 +31,5 @@ date/integer and boolean/decimal columns alongside a compatible numeric
 A separate `Control` sheet previously masked the missing mixed sheet by loading
 successfully. The regression queries the mixed rows in both the first load and
 a cache hit from a fresh process.
+
+The XLS fixture tests also run in the Skill Review CI workflow.
